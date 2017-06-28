@@ -30,20 +30,19 @@ public class takingClass {
                 inputs[i] = sc.nextInt();
             }
 
-            int max = 0;
+            boolean[] temp = new boolean[M+1];
             for(int i=0;i<N;i++){
 
-                for(int j=0;j<=max;j++){
-                    int temp;
+                for(int j=0;j<=M;j++){
+
                     if(d[j]) {
                         if(j+inputs[i] <= M) {
-                            d[j + inputs[i]] = true;
-                            temp = j + inputs[i];
+                            temp[j + inputs[i]] = true;
                         }
-
                     }
                 }
-                d[inputs[i]] = true;
+                temp[inputs[i]] = true;
+                d = Arrays.copyOf(temp, M+1);
             }
             for(int i=M;i>=0;i--){
                 if(d[i]){
