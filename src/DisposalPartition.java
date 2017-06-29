@@ -1,5 +1,8 @@
 import java.io.FileInputStream;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * Created by songchiyun on 2017. 6. 28..
@@ -10,7 +13,7 @@ public class DisposalPartition {
 
     public static void main(String args[]) throws Exception	{
 
-        //Scanner sc = new Scanner(System.in);
+       //Scanner sc = new Scanner(System.in);
         Scanner sc = new Scanner(new FileInputStream("disposal_sample.txt"));
 
         int T = sc.nextInt();
@@ -21,42 +24,61 @@ public class DisposalPartition {
 
 
             int[] d = new int[N];
-            for(int i=0;i<N;i++)
-                d[i] = sc.nextInt();
-
-            int front = 0;
-            int back = -1;
+            Queue<Integer> Q = new LinkedList<>();
             int sum = 0;
+            int len = 10000;
+
+
+            for(int i=0;i<N;i++){
+                int input = sc.nextInt();
+                Q.add(input);
+                sum += input;
+                while(sum >= M){
+                    int size = Q.size();
+
+                    if(len > size)
+                        len = size;
+                    sum -= Q.remove();
+                }
+            }
+            if(len == 10000)
+                len = 0;
+
+
+            /*
+            for(int i=0;i<N;i++) {
+                d[i] = sc.nextInt();
+            }
+            int front = 0;
+            int back = 0;
+            int sum = d[back];
             int len = Integer.MAX_VALUE;
 
-            System.out.println((front != N-1) && (back != N-1));
-            while( (front != N-1) && (back != N-1)) {
+            while(true) {
 
-                //System.out.println("?");
                 if(sum < M){
+                    if(back == N-1)
+                        break;
                     back++;
                     sum += d[back];
+
                 }
                 else{
+                    if(front == back){
+                        len = 1;
+                        break;
+                    }
 
-                    if(len > (back -front)+1) {
-                        System.out.println(len + "vs" + (back -front)+1);
-                        len = (back - front) + 1;
+                    int tempLen = (back - front)+1;
+                    if(len > tempLen) {
+                        len = tempLen;
                     }
                     sum -= d[front];
                     front++;
                 }
-                if(back == N-1){
 
-                    if(sum < M)
-                        break;
-                }
-
-            }
+            }*/
             Answer = len;
-
-
-
             System.out.println("Case #"+(test_case+1));
             System.out.println(Answer);
         }
