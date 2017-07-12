@@ -10,129 +10,99 @@ import java.util.Scanner;
  */
 public class DiscountTicket {
 
-    public static int Answer;
-    private int start;
-    private int target;
-    private Station[] stations;
-    private int K;
-    private int sum;
+    static int Answer;
+    public static class edge{
+        int s;
+        int d;
+        int cost;
+        edge(int s, int d, int cost){
+            this.s = s;
+            this.d = d;
+            this.cost = cost;
+        }
+    }
+    public static class station implements Comparable<station>{
+        int cost;
+        int name;
+        List<edge> edgeList;
+        station(int name){
+            this.name = name;
+            edgeList = new ArrayList<>();
+        }
+        public void addEdge(edge e){edgeList.add(e);}
 
-    DiscountTicket(Station[] stations){
-        this.stations = stations;
-        for(int i = 1; i < stations.length; i++){
+        @Override
+        public int compareTo(station other) {
+            return Integer.compare(this.cost, other.cost);
+        }
+    }
+    public static void init(station[] stations){
+        for(int i=1;i<stations.length;i++)
             stations[i].cost = Integer.MAX_VALUE;
-        }
     }
-    public void computePath(Station source){
-        PriorityQueue<Station> pq = new PriorityQueue<>();
-        source.cost = 0;
-        pq.offer(source);
-
-        while(!pq.isEmpty()){
-
-            Station actualStation = pq.poll();
-
-            for(edge e : actualStation.getEdges()){
-
-                Station station = stations[e.b];
-                int newDistance = actualStation.cost + e.cost;
-
-                if(station.cost > newDistance) {
-                    pq.remove(station);
-                    station.cost = newDistance;
-                    pq.offer(station);
-                }
-            }
-
-        }
-    }
-    public int getCost(Station target){
-        System.out.println("target : "+target.name + " cost :"+target.cost);
-        return target.cost;
-    }
-
-
-    public static void main(String args[]) throws Exception	{
+    public static void main(String args[]) throws Exception {
 
         //Scanner sc = new Scanner(System.in);
         Scanner sc = new Scanner(new FileInputStream("discountTicket_input.txt"));
-        Station[] stations;
-        List<edge> edgeList = new ArrayList<>();
+
         int T = sc.nextInt();
-        for(int test_case = 0; test_case < T; test_case++) {
-            Answer = 0;
+        for (int test_case = 0; test_case < T; test_case++) {
 
-            int N = sc.nextInt();
-            stations = new Station[N+1];
+            int N = sc.nextInt();  //number of stations
+            int M = sc.nextInt(); // number of edges
+            int K = sc.nextInt();
 
-            for(int i=1;i<=N;i++) {
-                stations[i] = new Station(i);
-            }
-            int M = sc.nextInt();
-
-            int K = sc.nextInt();  //ticket 가격
+            station[] s = new station[N+1];
+            for(int i=0;i<N+1;i++)
+                s[i] = new station(i);
 
             for(int i=0;i<M;i++){
-                int s, t, c;
-                s = sc.nextInt();
-                t = sc.nextInt();
-                c = sc.nextInt();
-                edge e1 = new edge(s,t,c);
-                stations[s].addEdge(e1);
-                edge e2 = new edge(t,s,c);
-                stations[t].addEdge(e2);
+                int src = sc.nextInt();
+                int des = sc.nextInt();
+                int cost = sc.nextInt();
+                edge e1 = new edge(src,des,cost);
+                edge e2 = new edge(des,src,cost);
+                s[src].addEdge(e1);
+                s[des].addEdge(e2);
             }
-
-
-            int P = sc.nextInt();
+            int P =sc.nextInt();
+            Answer = 0;
             for(int i=0;i<P;i++){
-                int s, t;
-                s = sc.nextInt();
-                t = sc.nextInt();
+                int src = sc.nextInt();
+                int des = sc.nextInt();
 
-                DiscountTicket d = new DiscountTicket(stations);
-                d.computePath(stations[s]);
+                init(s);
+                PriorityQueue<station> pq = new PriorityQueue<>();
 
-                int cost = d.getCost(stations[t]);
+                s[src].cost = 0;
 
-                if(cost < K)
+                pq.add(s[src]);
+                while( !pq.isEmpty() ){
+                    station actual = pq.remove();
+                    for(edge e : actual.edgeList){
+                        if(e.s == actual.name || e.d == actual.name){
+                            int tempDes;
+                            if(e.s == actual.name)
+                                tempDes = e.d;
+                            else
+                                tempDes = e.s;
+
+                            int compare = actual.cost + e.cost;
+
+                            if(compare < s[tempDes].cost) {
+                                s[tempDes].cost = compare;
+                                pq.add(s[tempDes]);
+                            }
+                        }
+                    }
+                }
+                if(s[des].cost > K)
                     Answer++;
+
             }
-            // Print the answer to standard output(screen).
-            System.out.println("Case #"+(test_case+1));
+
+            System.out.println("Case #" + (test_case + 1));
             System.out.println(Answer);
         }
-    }
-}
-class Station implements Comparable<Station>{
-    int name;
-    List<edge> edges;
-    boolean visited;
-    int cost;
-    Station(int name){
-        this.name = name;
-        this.visited =false;
-        edges = new ArrayList<>();
-    }
-    public void addEdge(edge e){
-        edges.add(e);
-    }
-    public List<edge> getEdges(){
-        return this.edges;
-    }
-
-    @Override
-    public int compareTo(Station other) {
-        return Integer.compare(this.cost, other.cost);
-    }
-}
-class edge{
-    int a;
-    int b;
-    int cost;
-    edge(int s, int t, int c){
-        this.a = s;
-        this.b = t;
-        this.cost = c;
     }
 }
