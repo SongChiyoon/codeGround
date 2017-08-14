@@ -43,6 +43,7 @@ public class Connected_Component {
 			int s = sc.nextInt();
 			int t = sc.nextInt();
 			node[s].addEdge(new edge(t));
+			node[t].addEdge(new edge(s));
 		}
 		
 		int ans = 0;
@@ -52,7 +53,7 @@ public class Connected_Component {
 			ans++;
 			Queue<node> q = new LinkedList<>();
 			q.add(node[i]);
-			node[1].setVisited(true);
+			node[i].setVisited(true);
 			while( !q.isEmpty() ){
 				
 				node a = q.remove();
