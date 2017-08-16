@@ -4,7 +4,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
 /**
- * Created by songchiyun on 2017. 8. 10..
+ * Created by songchiyun on 2017. 8. 16..
  * problem : https://www.acmicpc.net/problem/2644
  */
 public class Family_Calculation {
