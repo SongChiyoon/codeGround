@@ -42,17 +42,31 @@ public class favoriteNum {
             }
             else{
                 if(ans.length() != 0){
-                    index = 0;
-                    ans = "";
-                    if(N.charAt(index) == '7') {
-                        ans += "4";
-                        index++;
+                    boolean find = false;
+                    int p = -1;
+                    for(int i=index-1;i>=0;i--){
+                        if(ans.charAt(i) == '7'){
+                            find = true;
+                            p = i;
+                            break;
+                        }
+                    }
+                    if(find){
+                        String temp = "";
+                        for(int i=0;i<p;i++){
+                            temp += ans.charAt(i);
+                        }
+                        temp += "4";
+                        for(int i =p+1;i<N.length();i++){
+                            temp += "7";
+                        }
+                        ans = temp;
                     }
                     else{
-                        index++;
-                    }
-                    for(int i=index;i<N.length();i++){
-                        ans += "7";
+                        index = 1;
+                        ans = "";
+                        for(int i =index;i<N.length();i++)
+                             ans += "7";
                     }
                     break;
                 }
