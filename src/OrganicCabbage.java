@@ -15,8 +15,8 @@ public class OrganicCabbage {
 		Scanner sc = new Scanner(System.in);
 		int T = sc.nextInt();
 		for(int t=0;t<T;t++){
-			int M = sc.nextInt(); //가로길이 
-			int N = sc.nextInt(); // 세로 길이
+			int M = sc.nextInt(); //
+			int N = sc.nextInt(); //
 			int[][] d = new int[N][M];
 			boolean[][] v = new boolean[N][M];
 			int K = sc.nextInt();
